@@ -1,55 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>Maps - admarko</title>
+  <html lang="en-US">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Alex Markowitz">
+  <meta name="keywords" content="Alex Markowitz, UChicago, Student, Computer Science, CS, Entrepeneurship">
+  <meta name="author" content="Alex Markowitz">
   <meta charset="utf-8">
-  <title>p2</title>
-  <style>
-    body {
-      overflow: hidden;
-      height:100vh;
-      background-color: #ccc;
-    }
-    .state{
-      stroke-width: 0;
-    }
-    .stateID {
-      font-family: sans-serif;
-      text-anchor: middle;
-      dominant-baseline: central;
-      font-size: 11px;
-      fill: #333;
-      /* thanks http://stackoverflow.com/questions/4919076/outline-effect-to-text */
-      text-shadow:
-      1px  0px 1px #ddd,
-      -1px  0px 1px #ddd,
-      0px  1px 1px #ddd,
-      0px -1px 1px #ddd;
-    }
-    .container {
-      text-align: center;
-      height:100%;
-    }
-    .cell {
-      /* thanks https://css-tricks.com/centering-css-complete-guide/ */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    #thevis{
-      height:60%;
-      width:100%;
-    }
-    #cmapleg{
-      height:40%;
-      float:left;
-      width:50%;
-    }
-    #selector{
-      height:40%;
-      float:right;
-      width:50%;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="maps.css">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
 </head>
 <body>
   <div class="container">
