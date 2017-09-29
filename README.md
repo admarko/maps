@@ -1,2 +1,2 @@
 # maps
-Colored heat maps based on csv data for Data Visualization class (Javascript and D3)
+Colored heat maps based on csv state data for CMSC 23900: Data Visualization (Javascript and D3)
