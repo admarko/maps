@@ -31,7 +31,7 @@ body {
 }
 #thevis{
   height:60%;
-  width:100%;
+  width: 100%;
 }
 #cmapleg{
   height:40%;
@@ -44,6 +44,5 @@ body {
   width:50%;
 }
 .variate{
-  font-align: center;
-  color: green;
+  text-align: center;
 }

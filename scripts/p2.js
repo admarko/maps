@@ -452,9 +452,9 @@ function choiceSet(wat) {
       p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
 
       //part 3
-      d3.select("#xminlabel").html("<text>" + d3.format(",.0f")(p2.area.extent[0]) + "</text>");
+      d3.select("#xminlabel").html("<text>" + d3.format(",.0f")(p2.area.extent[0])+"sq mi" + "</text>");
       d3.select("#yminlabel").html("");
-      d3.select("#xmaxlabel").html("<text>" + d3.format(".0f")(p2.area.extent[1]) + "</text>");
+      d3.select("#xmaxlabel").html("<text>" + d3.format(".0f")(p2.area.extent[1])+"sq mi" + "</text>");
       d3.select("#ymaxlabel").html("");
 
       //part 4 - scale unemployment to size of legend
