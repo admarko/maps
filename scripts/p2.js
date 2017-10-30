@@ -181,7 +181,6 @@ function dataFinish(data) {
                   .range([p2.vu.color(mintemp.vupl), p2.vu.color(maxtemp.vupl)]);
 
 
-
   //(WB) CLINTON/TRUMP - BIVARIATE
   p2.wb = {}
   p2.wb.maxvt = d3.max(data, function(d){return d.vt});
@@ -210,14 +209,14 @@ function dataFinish(data) {
 
 
 function choiceSet(wat) {
-   var uni = (["AR", "EM", "UN", "OB", "IM", "VU", "WU"].indexOf(wat) >= 0);
+   var uni = (["AR", "EM", "UN", "OB", "IM", "VU", "WU"].indexOf(wat) >= 0); //boolean for univariates
+   var fillColor; //color to be used later in Part 1
 
   switch(wat){
     //UNEMPLOYMENT
     case "UN":
       //part 1
-      d3.select("#mapUS").selectAll("path").data(p2.usData).transition(p2.transdur)
-        .style("fill", function(d){return p2.unemployment.color(d.unemployment);})
+      fillColor = function(d){return p2.unemployment.color(d.unemployment);}
 
       //Part 2 - Same as filling in map, but different starting range (cmlSize)
       p2.unemployment.legendextent = [0, p2.cmlSize];
@@ -266,8 +265,7 @@ function choiceSet(wat) {
     //EMPLOYMENT
     case "EM":
       //part 1
-      d3.select("#mapUS").selectAll("path").data(p2.usData).transition(p2.transdur)
-        .style("fill", function(d){return p2.employment.color(d.employment);})
+      fillColor = function(d){return p2.employment.color(d.employment);}
 
       //Part 2 - Same as filling in map, but different starting range (cmlSize)
       p2.employment.legendextent = [0, p2.cmlSize];
@@ -316,8 +314,7 @@ function choiceSet(wat) {
     //OBESITY
     case "OB":
       //part 1
-      d3.select("#mapUS").selectAll("path").data(p2.usData).transition(p2.transdur)
-        .style("fill", function(d){return p2.obesity.color(d.obesity);})
+      fillColor = function(d){return p2.obesity.color(d.obesity);}
 
       //Part 2 - Same as filling in map, but different starting range (cmlSize)
       for (var j=0, k=0; j < p2.cmlSize; ++j) {
@@ -373,8 +370,7 @@ function choiceSet(wat) {
     //INFANT MORTALITY
     case "IM":
       //part 1
-      d3.select("#mapUS").selectAll("path").data(p2.usData).transition(p2.transdur)
-        .style("fill", function(d){return p2.infant.color(d.infant);})
+      fillColor = function(d){return p2.infant.color(d.infant);}
 
       //Part 2 - Same as filling in map, but different starting range (cmlSize)
       p2.infant.legendextent = [0, p2.cmlSize];
@@ -426,8 +422,7 @@ function choiceSet(wat) {
     //AREA
     case "AR":
       //part 1
-      d3.select("#mapUS").selectAll("path").data(p2.usData).transition(p2.transdur)
-        .style("fill", function(d){return p2.area.color(d.area);})
+      fillColor = function(d){return p2.area.color(d.area);}
 
       //Part 2 - Same as filling in map, but different starting range (cmlSize)
       p2.area.legendextent = [0, p2.cmlSize];
@@ -473,8 +468,7 @@ function choiceSet(wat) {
     //EARNINGS, SYMMETRIC
     case "ES":
       //part 1
-      d3.select("#mapUS").selectAll("path").data(p2.usData).transition(p2.transdur)
-        .style("fill", function(d){return p2.es.color(d);})
+      fillColor = function(d){return p2.es.color(d);}
 
       //part 2
       p2.er.legend = d3.scaleLinear()
@@ -520,8 +514,7 @@ break;
 //EARNINGS, RE-CENTERED
 case "ER":
   //part 1
-  d3.select("#mapUS").selectAll("path").data(p2.usData).transition(p2.transdur)
-    .style("fill", function(d){return p2.er.color(d);})
+  fillColor = function(d){return p2.er.color(d);}
 
   //part 2
   p2.er.legend = d3.scaleLinear()
@@ -570,8 +563,7 @@ case "ER":
 
     case "VU":
       //part 1
-      d3.select("#mapUS").selectAll("path").data(p2.usData).transition(p2.transdur)
-        .style("fill", function(d){return p2.vu.color(d.vupl);})
+      fillColor = function(d){return p2.vu.color(d.vupl);}
 
       //Part 2 - Linearly interpolate 'l' value leaving h and c the same as before
       p2.vu.scaledhelp = d3.scaleLinear()
@@ -614,9 +606,7 @@ case "ER":
 
     case "WU":
       //part 1
-      d3.select("#mapUS").selectAll("path").data(p2.usData).transition(p2.transdur)
-        .style("fill", function(d){return p2.wu.color(d.wupl);})
-
+      fillColor = function(d){return p2.wu.color(d.wupl);}
 
       //Part 2 - Same as filling in map, but different starting range (cmlSize)
       p2.wu.scaledhelp = d3.scaleLinear()
@@ -659,8 +649,7 @@ case "ER":
 
     case "VB":
       //part 1
-      d3.select("#mapUS").selectAll("path").data(p2.usData).transition(p2.transdur)
-        .style("fill", function(d){return p2.vb.color(p2.vb.va(d));});
+      fillColor = function(d){return p2.vb.color(p2.vb.va(d));}
 
       //part 2
       p2.er.legend = d3.scaleLinear()
@@ -713,8 +702,7 @@ case "ER":
 
     case "WB":
       //part 1
-      d3.select("#mapUS").selectAll("path").data(p2.usData).transition(p2.transdur)
-        .style("fill", function(d){return p2.wb.color(p2.wb.wa(d));});
+      fillColor = function(d){return p2.wb.color(p2.wb.wa(d));}
 
       //Part 2
       p2.wb.scaledhelp = d3.scaleLinear()
@@ -757,6 +745,20 @@ case "ER":
 
     break;
   }
+
+  //Part 1
+  d3.select("#mapUS").selectAll("path").data(p2.usData).transition(p2.transdur)
+    .style("fill", fillColor);
+
+
+
+  //assign based on univariate vs. bivariate
+  if(uni){
+
+  }else{
+
+  }
+
 }
 
 /* 0) based on "wat", get all the information (created in dataFinish())
