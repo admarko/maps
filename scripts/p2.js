@@ -210,7 +210,9 @@ function dataFinish(data) {
 
 function choiceSet(wat) {
    var uni = (["AR", "EM", "UN", "OB", "IM", "VU", "WU"].indexOf(wat) >= 0); //boolean for univariates
-   var fillColor; //color to be used later in Part 1
+   var fillColor;                            //color to be used  in Part 1
+   var minx, maxx, miny, maxy, unit, unity;  //text to be used in Part 3
+
 
   switch(wat){
     //UNEMPLOYMENT
@@ -244,10 +246,9 @@ function choiceSet(wat) {
       p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
 
       //part 3
-      d3.select("#xminlabel").html("<text>" + d3.format(",.2f")(p2.unemployment.extent[0]) + "</text>");
-      d3.select("#yminlabel").html("");
-      d3.select("#xmaxlabel").html("<text>" + d3.format(",.2f")(p2.unemployment.extent[1]) + "</text>");
-      d3.select("#ymaxlabel").html("");
+      unit = "%";
+      minx = d3.format(",.2f")(p2.unemployment.extent[0]);
+      maxx = d3.format(",.2f")(p2.unemployment.extent[1]);
 
       //part 4 - scale unemployment to size of legend
       p2.unemployment.ticks = d3.scaleLinear()
@@ -293,10 +294,9 @@ function choiceSet(wat) {
       p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
 
       //part 3
-      d3.select("#xminlabel").html("<text>" + d3.format(",.2r")(p2.employment.extent[0]) + "</text>");
-      d3.select("#yminlabel").html("");
-      d3.select("#xmaxlabel").html("<text>" + d3.format(",.2f")(p2.employment.extent[1]) + "</text>");
-      d3.select("#ymaxlabel").html("");
+      unit = "%";
+      minx = d3.format(",.2f")(p2.employment.extent[0]);
+      maxx = d3.format(",.2f")(p2.employment.extent[1]);
 
       //part 4 - scale unemployment to size of legend
       p2.employment.ticks = d3.scaleLinear()
@@ -349,10 +349,9 @@ function choiceSet(wat) {
       p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
 
       //part 3
-      d3.select("#xminlabel").html("<text>" + d3.format(",.1f")(p2.obesity.extent[0]) + "</text>");
-      d3.select("#yminlabel").html("");
-      d3.select("#xmaxlabel").html("<text>" + d3.format(",.1f")(p2.obesity.extent[1]) + "</text>");
-      d3.select("#ymaxlabel").html("");
+      unit = "%"
+      minx = d3.format(",.1f")(p2.obesity.extent[0])
+      maxx = d3.format(",.1f")(p2.obesity.extent[1])
 
       //part 4 - scale unemployment to size of legend
       p2.obesity.ticks = d3.scaleLinear()
@@ -401,10 +400,9 @@ function choiceSet(wat) {
       p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
 
       //part 3
-      d3.select("#xminlabel").html("<text>" + d3.format(",.1f")(p2.infant.extent[0]) + "</text>");
-      d3.select("#yminlabel").html("");
-      d3.select("#xmaxlabel").html("<text>" + d3.format(",.1f")(p2.infant.extent[1]) + "</text>");
-      d3.select("#ymaxlabel").html("");
+      unit = "%"
+      minx = d3.format(",.1f")(p2.infant.extent[0]);
+      maxx = d3.format(",.1f")(p2.infant.extent[1]);
 
       //part 4 - scale unemployment to size of legend
       p2.infant.ticks = d3.scaleLinear()
@@ -447,10 +445,9 @@ function choiceSet(wat) {
       p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
 
       //part 3
-      d3.select("#xminlabel").html("<text>" + d3.format(",.0f")(p2.area.extent[0])+"sq mi" + "</text>");
-      d3.select("#yminlabel").html("");
-      d3.select("#xmaxlabel").html("<text>" + d3.format(".0f")(p2.area.extent[1])+"sq mi" + "</text>");
-      d3.select("#ymaxlabel").html("");
+      unit = " sq mi"
+      minx = d3.format(",.0f")(p2.area.extent[0]);
+      maxx = d3.format(",.0f")(p2.area.extent[1]);
 
       //part 4 - scale unemployment to size of legend
       p2.area.ticks = d3.scaleLinear()
@@ -491,10 +488,12 @@ function choiceSet(wat) {
         p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
 
   //part 3
-  d3.select("#xminlabel").html("<text>" + "0" + "</text>");
-  d3.select("#yminlabel").html("<text>" + "0" + "</text>");
-  d3.select("#xmaxlabel").html("<text>" + p2.es.emax + "</text>");
-  d3.select("#ymaxlabel").html("<text>" + p2.es.emax + "</text>");
+  unit = " (M)";
+  unity = " (W)"
+  minx = 0;
+  miny = 0;
+  maxx = p2.es.emax;
+  maxy = p2.es.emax;
 
   //part 4 - scale unemployment to size of legend
   p2.es.ticks = d3.scaleLinear()
@@ -537,10 +536,13 @@ case "ER":
         p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
 
       //part 3
-      d3.select("#xminlabel").html("<text>" + p2.er.menextent[0] + "</text>");
-      d3.select("#yminlabel").html("<text>" + p2.er.womenextent[0] + "</text>");
-      d3.select("#xmaxlabel").html("<text>" + p2.er.menextent[1] + "</text>");
-      d3.select("#ymaxlabel").html("<text>" + p2.er.womenextent[1] + "</text>");
+      unit = " (M)";
+      unity = " (W)"
+      minx = p2.er.menextent[0];
+      miny = p2.er.womenextent[0];
+      maxx = p2.er.menextent[1];
+      maxy = p2.er.womenextent[1]
+
 
       //part 4 - scale unemployment to size of legend
       p2.er.menticks = d3.scaleLinear()
@@ -585,10 +587,9 @@ case "ER":
       p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
 
       //part 3
-      d3.select("#xminlabel").html("<text>" + 0 + "</text>");
-      d3.select("#yminlabel").html("");
-      d3.select("#xmaxlabel").html("<text>" + 1 + "</text>");
-      d3.select("#ymaxlabel").html("");
+      unit = ""
+      minx = "Rep.";
+      maxx = "Dem.";
 
       //part 4 - scale unemployment to size of legend
       p2.vu.ticks = d3.scaleLinear()
@@ -628,10 +629,9 @@ case "ER":
       p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
 
       //part 3
-      d3.select("#xminlabel").html("<text>" + 0 + "</text>");
-      d3.select("#yminlabel").html("");
-      d3.select("#xmaxlabel").html("<text>" + 1 + "</text>");
-      d3.select("#ymaxlabel").html("");
+      unit = ""
+      minx = "Rep.";
+      maxx = "Dem.";
 
       //part 4 -
       p2.wu.ticks = d3.scaleLinear()
@@ -682,10 +682,12 @@ case "ER":
       p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
 
       //part 3
-      d3.select("#xminlabel").html("<text>" + 0 + "</text>");
-      d3.select("#yminlabel").html("<text>" + 0 + "</text>");
-      d3.select("#xmaxlabel").html("<text>" + 1 + "</text>");
-      d3.select("#ymaxlabel").html("<text>" + 1 + "</text>");
+      unit = ""
+      unity = ""
+      minx = "Rep.";
+      miny = "Less votes";
+      maxx = "Dem.";
+      maxy = "More votes";
 
       //part 4 -
       p2.vb.ticks = d3.scaleLinear()
@@ -726,10 +728,12 @@ case "ER":
       p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
 
       //part 3
-      d3.select("#xminlabel").html("<text>" + 0 + "</text>");
-      d3.select("#yminlabel").html("<text>" + 0 + "</text>");
-      d3.select("#xmaxlabel").html("<text>" + 1 + "</text>");
-      d3.select("#ymaxlabel").html("<text>" + 1 + "</text>");
+      unit = "";
+      unity = "";
+      minx = "Rep.";
+      miny = "Less votes";
+      maxx = "Dem.";
+      maxy = "More votes";
 
       //part 4 -
       p2.wb.ticks = d3.scaleLinear()
@@ -750,13 +754,19 @@ case "ER":
   d3.select("#mapUS").selectAll("path").data(p2.usData).transition(p2.transdur)
     .style("fill", fillColor);
 
-
+  //Part 3
+  d3.select("#xminlabel").html("<text>" + minx + unit + "</text>");
+  d3.select("#xmaxlabel").html("<text>" + maxx + unit + "</text>");
 
   //assign based on univariate vs. bivariate
   if(uni){
-
+    //Part 3
+    d3.select("#yminlabel").html("");
+    d3.select("#ymaxlabel").html("");
   }else{
-
+    //Part 3
+    d3.select("#yminlabel").html("<text>" + miny + unity + "</text>");
+    d3.select("#ymaxlabel").html("<text>" + maxy + unity + "</text>");
   }
 
 }
