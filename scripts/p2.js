@@ -20,11 +20,11 @@
         (factory((global.p2 = global.p2 || {})));
 }(this, (function (exports) { 'use strict';
 
-// the marks in the colormap legend should transition() with this duration
-const transDur = 500;
-const hexWidth = 60; // size of hexagons in US map
-const circRad = 5; // size of circle marks in bivariate map
-const cmlSize = 210; // width and height of picture of colormap
+
+const transDur = 500; // the marks in the colormap legend should transition() with this duration
+const hexWidth = 60;  // size of hexagons in US map
+const circRad = 5;    // size of circle marks in bivariate map
+const cmlSize = 210;  // width and height of picture of colormap
 
 /* computes the info about each state that will be needed for visualization */
 function rowFinish(d) {
