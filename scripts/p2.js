@@ -21,10 +21,10 @@
 }(this, (function (exports) { 'use strict';
 
 
-const transDur = 500; // the marks in the colormap legend should transition() with this duration
-const hexWidth = 60;  // size of hexagons in US map
-const circRad = 5;    // size of circle marks in bivariate map
-const cmlSize = 210;  // width and height of picture of colormap
+const transDur = 500; //the marks in the colormap legend should transition() with this duration
+const hexWidth = 60;  //size of hexagons in US map
+const circRad = 5;    //size of circle marks in bivariate map
+const cmlSize = 210;  //width and height of picture of colormap
 
 /* computes the info about each state that will be needed for visualization */
 function rowFinish(d) {
@@ -54,16 +54,8 @@ function rowFinish(d) {
 }
 
 
-
-/* computes per-state information that can only be computed once all the
-   data has read in (e.g. the political leaning variable). Also, learn
-   here (once) the extents (the min-to-max range, as learned by
-   d3.extent()) for variables that need to be displayed with the colormap
-   and indicated in the colormap legend. Creates some convenient and
-   uniform way to refer to the information needed for every variable
-   display: e.g. how to retrieve that variable from each element of the
-   data array, the min-to-max extent (as from d3.extent()) of that
-   variable, and which colormap to use. */
+/* Create color functions to use in choiceSet by running calculations once all
+   the data has been read in */
 function dataFinish(data) {
   //UNEMPLOYMENT - map [0,1/3,2/3,1] over unemployment range scaled to [0,1] then convert to color
   p2.unemployment = {}
@@ -110,7 +102,6 @@ function dataFinish(data) {
   p2.infant.c = function(d){return 23 * Math.sin(Math.PI * p2.infant.x(d))**2  ;}
   p2.infant.l = function(d){return 10 + 90 * p2.infant.x(d);}
   p2.infant.color = function(d){return d3.hcl(p2.infant.h(d), p2.infant.c(d), p2.infant.l(d));}
-
 
   //AREA
   p2.area = {}
@@ -204,16 +195,19 @@ function dataFinish(data) {
   p2.wb.color = d3.scaleLinear()
                   .domain(p2.waextent)
                   .range([p2.wu.color(mintemp.wupl), p2.wu.color(maxtemp.wupl)]);
-
 }
 
 
+/* Part 1) Apply colormap to the states in #mapUS using transition of duration p2.transDur */
+/* Part 2) Fill in colormap
+/* Part 3) Update min/max value of colormap with appropriate units */
+/* Part 4) Add ticks (univariate) or bubbles (bivarate) to colormap */
 function choiceSet(wat) {
-   var univariate = (["AR", "EM", "UN", "OB", "IM", "VU", "WU"].indexOf(wat) >= 0); //boolean
-   var fillColor;                           //color for Part 1
-   var pix;                                 //pixel for Part 2
-   var minx, maxx, miny, maxy, unit, unity; //text for Part 3
-   var ticks, circx, circy;                 //tick marks for Part 4
+  var univariate = (["AR", "EM", "UN", "OB", "IM", "VU", "WU"].indexOf(wat) >= 0); //boolean
+  var fillColor;                           //color for Part 1
+  var pix;                                 //pixel for Part 2
+  var minx, maxx, miny, maxy, unit, unity; //text for Part 3
+  var ticks, circx, circy;                 //tick marks for Part 4
 
   switch(wat){
     //UNEMPLOYMENT
@@ -235,7 +229,7 @@ function choiceSet(wat) {
       minx = d3.format(",.2f")(p2.unemployment.extent[0]);
       maxx = d3.format(",.2f")(p2.unemployment.extent[1]);
 
-      //part 4 - scale unemployment to size of legend
+      //part 4
       p2.unemployment.ticks = d3.scaleLinear()
                                 .domain(p2.unemployment.extent)
                                 .range([0,p2.cmlSize]);
@@ -261,7 +255,7 @@ function choiceSet(wat) {
       minx = d3.format(",.2f")(p2.employment.extent[0]);
       maxx = d3.format(",.2f")(p2.employment.extent[1]);
 
-      //part 4 - scale unemployment to size of legend
+      //part 4
       p2.employment.ticks = d3.scaleLinear()
                                 .domain(p2.employment.extent)
                                 .range([0,p2.cmlSize]);
@@ -303,7 +297,7 @@ function choiceSet(wat) {
       minx = d3.format(",.1f")(p2.obesity.extent[0])
       maxx = d3.format(",.1f")(p2.obesity.extent[1])
 
-      //part 4 - scale unemployment to size of legend
+      //part 4
       p2.obesity.ticks = d3.scaleLinear()
                                 .domain(p2.obesity.extent)
                                 .range([0,p2.cmlSize]);
@@ -324,7 +318,6 @@ function choiceSet(wat) {
                             .range([0,1]);
       p2.infant.chelp = function(d){return 23 * Math.sin(Math.PI * p2.infant.xhelp(d))**2  ;}
       p2.infant.lhelp = function(d){return 10 + 90 * p2.infant.xhelp(d);}
-
       p2.infant.colorhelp = function(d){return d3.hcl(p2.infant.hhelp(d), p2.infant.chelp(d), p2.infant.lhelp(d));}
       pix = function(i, j){return d3.rgb(p2.infant.colorhelp(i)).toString();};
 
@@ -333,7 +326,7 @@ function choiceSet(wat) {
       minx = d3.format(",.1f")(p2.infant.extent[0]);
       maxx = d3.format(",.1f")(p2.infant.extent[1]);
 
-      //part 4 - scale unemployment to size of legend
+      //part 4
       p2.infant.ticks = d3.scaleLinear()
                                 .domain(p2.infant.extent)
                                 .range([0,p2.cmlSize]);
@@ -350,7 +343,6 @@ function choiceSet(wat) {
                             .domain([0, p2.cmlSize])
                             .range([d3.rgb(0,0,0), d3.rgb(255,255,255)]);
       pix = function(i, j){return p2.area.colorhelp(i);};
-
 
       //part 3
       unit = " sq mi"
@@ -375,8 +367,7 @@ function choiceSet(wat) {
                           .range([0, p2.es.emax]);
 
       p2.er.colorhelp = function(i, j) {return d3.lab(30 + 45 * ((p2.er.legend(i) / p2.es.emax) +
-        (p2.er.legend(j) / p2.es.emax)), 0, 230 * (p2.er.legend(i)/p2.es.emax - p2.er.legend(j)/p2.es.emax));}
-
+        (p2.er.legend(j) / p2.es.emax)), 0, 230 * (p2.er.legend(i)/p2.es.emax - p2.er.legend(j)/p2.es.emax));};
       pix = function(i, j){return d3.rgb(p2.er.colorhelp(i, p2.cmlSize-j)).toString();};
 
       //part 3
@@ -387,57 +378,55 @@ function choiceSet(wat) {
       maxx = p2.es.emax;
       maxy = p2.es.emax;
 
-      //part 4 - scale unemployment to size of legend
+      //part 4
       p2.es.ticks = d3.scaleLinear()
                                 .domain([0, p2.es.emax])
                                 .range([0,p2.cmlSize]);
       circx = function(d){ return p2.es.ticks(d.men);};
       circy = function(d){ return p2.cmlSize - p2.es.ticks(d.women);};
-
     break;
 
-//EARNINGS, RE-CENTERED
-case "ER":
-  //part 1
-  fillColor = function(d){return p2.er.color(d);}
+    //EARNINGS, RE-CENTERED
+    case "ER":
+      //part 1
+      fillColor = function(d){return p2.er.color(d);}
 
-  //part 2
-  p2.er.legend = d3.scaleLinear()
-                          .domain([0, p2.cmlSize])
-                          .range([0, p2.es.emax]);
+      //part 2
+      p2.er.legend = d3.scaleLinear()
+                              .domain([0, p2.cmlSize])
+                              .range([0, p2.es.emax]);
 
-  p2.er.colorhelp = function(i, j) {return d3.lab(30 + 45 * ((p2.er.legend(i) / p2.es.emax) +
-        (p2.er.legend(j) / p2.es.emax)), 0, 230 * (p2.er.legend(i)/p2.es.emax - p2.er.legend(j)/p2.es.emax));}
+      p2.er.colorhelp = function(i, j) {return d3.lab(30 + 45 * ((p2.er.legend(i) / p2.es.emax) +
+            (p2.er.legend(j) / p2.es.emax)), 0, 230 * (p2.er.legend(i)/p2.es.emax - p2.er.legend(j)/p2.es.emax));}
 
-  pix = function(i, j){return d3.rgb(p2.er.colorhelp(i, p2.cmlSize-j)).toString();};
+      pix = function(i, j){return d3.rgb(p2.er.colorhelp(i, p2.cmlSize-j)).toString();};
 
-  //part 3
-  unit = " (M)";
-  unity = " (W)"
-  minx = p2.er.menextent[0];
-  miny = p2.er.womenextent[0];
-  maxx = p2.er.menextent[1];
-  maxy = p2.er.womenextent[1]
+      //part 3
+      unit = " (M)";
+      unity = " (W)"
+      minx = p2.er.menextent[0];
+      miny = p2.er.womenextent[0];
+      maxx = p2.er.menextent[1];
+      maxy = p2.er.womenextent[1]
 
+      //part 4
+      p2.er.menticks = d3.scaleLinear()
+                                .domain([p2.er.menextent[0], p2.er.menextent[1]])
+                                .range([0,p2.cmlSize]);
 
-  //part 4 - scale unemployment to size of legend
-  p2.er.menticks = d3.scaleLinear()
-                            .domain([p2.er.menextent[0], p2.er.menextent[1]])
-                            .range([0,p2.cmlSize])
+      p2.er.womenticks = d3.scaleLinear()
+                                .domain([p2.er.womenextent[0], p2.er.womenextent[1]])
+                                .range([0,p2.cmlSize]);
 
-  p2.er.womenticks = d3.scaleLinear()
-                            .domain([p2.er.womenextent[0], p2.er.womenextent[1]])
-                            .range([0,p2.cmlSize]);
-
-    circx = function(d){ return p2.er.menticks(d.men); };
-    circy = function(d){ return p2.cmlSize - p2.er.womenticks(d.women); };
-  break;
+      circx = function(d){ return p2.er.menticks(d.men); };
+      circy = function(d){ return p2.cmlSize - p2.er.womenticks(d.women); };
+    break;
 
     case "VU":
       //part 1
       fillColor = function(d){return p2.vu.color(d.vupl);}
 
-      //Part 2 - Linearly interpolate 'l' value leaving h and c the same as before
+      //Part 2
       p2.vu.scaledhelp = d3.scaleLinear()
                             .domain([0,1])
                             .range([0, p2.cmlSize]);
@@ -452,7 +441,7 @@ case "ER":
       minx = "Rep.";
       maxx = "Dem.";
 
-      //part 4 - scale unemployment to size of legend
+      //part 4
       p2.vu.ticks = d3.scaleLinear()
                                 .domain([0,1])
                                 .range([0,p2.cmlSize]);
@@ -463,7 +452,7 @@ case "ER":
       //part 1
       fillColor = function(d){return p2.wu.color(d.wupl);}
 
-      //Part 2 - Same as filling in map, but different starting range (cmlSize)
+      //Part 2
       p2.wu.scaledhelp = d3.scaleLinear()
                             .domain([0,1])
                             .range([0, p2.cmlSize]);
@@ -496,14 +485,9 @@ case "ER":
       p2.er.colorhelp = function(i, j) {return d3.lab(30 + 45 * ((p2.er.legend(i) / p2.es.emax) +
         (p2.er.legend(j) / p2.es.emax)), 0, 230 * (p2.er.legend(i)/p2.es.emax - p2.er.legend(j)/p2.es.emax));}
 
-
-
       p2.vb.scaledhelp = d3.scaleLinear()
                             .domain([0,1])
                             .range([0, p2.cmlSize]);
-      //p2.vb.colorhelp = d3.scaleLinear()
-      //                      .domain([0, 1].map(function(d){return p2.vb.scaledhelp(d);}))
-      //                      .range([d3.hcl(d3.rgb(210,0,0)).l, d3.hcl(d3.rgb(0,0,210)).l]);
       p2.vb.lhelp = d3.scaleLinear()
                             .domain([0, p2.cmlSize])
                             .range([20,120]);
@@ -517,7 +501,7 @@ case "ER":
       maxx = "Dem.";
       maxy = "More votes";
 
-      //part 4 -
+      //part 4
       p2.vb.ticks = d3.scaleLinear()
                               .domain([0,1])
                               .range([0,p2.cmlSize]);
@@ -533,9 +517,6 @@ case "ER":
       p2.wb.scaledhelp = d3.scaleLinear()
                             .domain([0,1])
                             .range([0, p2.cmlSize]);
-      // p2.wb.colorhelp = d3.scaleLinear()
-      //                       .domain([0, 1].map(function(d){return p2.wb.scaledhelp(d);}))
-      //                       .range([d3.hcl(d3.rgb(210,0,0)).l, d3.hcl(d3.rgb(0,0,210)).l]);
       p2.wb.lhelp = d3.scaleLinear()
                             .domain([0, p2.cmlSize])
                             .range([20,120]);
@@ -550,7 +531,7 @@ case "ER":
       maxx = "Dem.";
       maxy = "More votes";
 
-      //part 4 -
+      //part 4
       p2.wb.ticks = d3.scaleLinear()
                               .domain([0,1])
                               .range([0,p2.cmlSize]);
@@ -559,7 +540,7 @@ case "ER":
     break;
   }
 
-  //Apply switch values to selected option
+  /* Now, apply switch values to selected option */
 
   //Part 1
   d3.select("#mapUS").selectAll("path").data(p2.usData).transition(p2.transdur)
@@ -585,12 +566,12 @@ case "ER":
   d3.select("#xminlabel").html("<text>" + minx + unit + "</text>");
   d3.select("#xmaxlabel").html("<text>" + maxx + unit + "</text>");
 
-
   if(univariate){
     //Part 3
     d3.select("#yminlabel").html("");
     d3.select("#ymaxlabel").html("");
 
+    //part 4
     d3.select("#cmlMarks").selectAll("ellipse")
       .data(p2.usData).transition(p2.transdur)
         .attr("rx", 0.5)
@@ -603,6 +584,7 @@ case "ER":
     d3.select("#yminlabel").html("<text>" + miny + unity + "</text>");
     d3.select("#ymaxlabel").html("<text>" + maxy + unity + "</text>");
 
+    //part 4
     d3.select("#cmlMarks").selectAll("ellipse")
       .data(p2.usData).transition(p2.transdur)
         .attr("rx", p2.circRad)
@@ -611,11 +593,6 @@ case "ER":
         .attr("cy", circy)
   }
 }
-
-/* Part 1) Apply colormap to the states in #mapUS using transition of duration p2.transDur */
-/* Part 2) Fill in colormap
-/* Part 3) Update min/max value of colormap with appropriate units */
-/* Part 4) Add ticks (univariate) or bubbles (bivarate) to colormap */
 
 exports.hexWidth = hexWidth;
 exports.transDur = transDur;
