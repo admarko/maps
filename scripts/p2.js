@@ -209,10 +209,10 @@ function dataFinish(data) {
 
 
 function choiceSet(wat) {
-   var uni = (["AR", "EM", "UN", "OB", "IM", "VU", "WU"].indexOf(wat) >= 0); //boolean for univariates
-   var fillColor;                            //color to be used  in Part 1
-   var minx, maxx, miny, maxy, unit, unity;  //text to be used in Part 3
-
+   var univariate = (["AR", "EM", "UN", "OB", "IM", "VU", "WU"].indexOf(wat) >= 0); //boolean
+   var fillColor;                           //color for Part 1
+   var minx, maxx, miny, maxy, unit, unity; //text for Part 3
+   var pix;                                 //pixel for Part 2
 
   switch(wat){
     //UNEMPLOYMENT
@@ -229,21 +229,7 @@ function choiceSet(wat) {
                             .domain([0, 1/3, 2/3, 1].map(function(d){return p2.unemployment.scaledhelp(d);}))
                             .range([d3.rgb(0,0,0), d3.rgb(230,0,0), d3.rgb(255,230,0), d3.rgb(255,255,255)]);
 
-
-      //Parsing help from: http://stackoverflow.com/questions/10970958/get-a-color-component-from-an-rgb-string-in-javascript
-      for (var j=0, k=0; j < p2.cmlSize; ++j) {
-        for (var i=0; i < p2.cmlSize; ++i) {
-          var temp = p2.unemployment.colorhelp(i);
-          temp = temp.substring(4, temp.length-1)
-                      .replace(/ /g, '')
-                      .split(',');
-          p2.cmlImage.data[k++] = temp[0]; // red
-          p2.cmlImage.data[k++] = temp[1]; // green
-          p2.cmlImage.data[k++] = temp[2]; // blue
-          p2.cmlImage.data[k++] = 255; // opacity; keep at 255
-        }
-      }
-      p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
+      pix = function(i, j){return p2.unemployment.colorhelp(i);};
 
       //part 3
       unit = "%";
@@ -276,22 +262,7 @@ function choiceSet(wat) {
       p2.employment.colorhelp = d3.scaleLinear()
                             .domain([0, 1/3, 2/3, 1].map(function(d){return p2.employment.scaledhelp(d);}))
                             .range([d3.rgb(255,255,255), d3.rgb(255,230,0), d3.rgb(230,0,0), d3.rgb(0,0,0)]);
-
-
-      //Parsing help from: http://stackoverflow.com/questions/10970958/get-a-color-component-from-an-rgb-string-in-javascript
-      for (var j=0, k=0; j < p2.cmlSize; ++j) {
-        for (var i=0; i < p2.cmlSize; ++i) {
-          var temp = p2.employment.colorhelp(i);
-          temp = temp.substring(4, temp.length-1)
-                      .replace(/ /g, '')
-                      .split(',');
-          p2.cmlImage.data[k++] = temp[0]; // red
-          p2.cmlImage.data[k++] = temp[1]; // green
-          p2.cmlImage.data[k++] = temp[2]; // blue
-          p2.cmlImage.data[k++] = 255; // opacity; keep at 255
-        }
-      }
-      p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
+      pix = function(i, j){return p2.employment.colorhelp(i);};
 
       //part 3
       unit = "%";
@@ -317,36 +288,29 @@ function choiceSet(wat) {
       fillColor = function(d){return p2.obesity.color(d.obesity);}
 
       //Part 2 - Same as filling in map, but different starting range (cmlSize)
-      for (var j=0, k=0; j < p2.cmlSize; ++j) {
-        for (var i=0; i < p2.cmlSize; ++i) {
-          if(i<p2.cmlSize/9){
-            temp = [247, 204, 160.7];
-          }else if(i < p2.cmlSize*2/9){
-            temp = [232, 178.5, 125];
-          }else if(i < p2.cmlSize*2/9){
-            temp = [204, 153, 102];
-          }else if(i < p2.cmlSize/3){
-            temp = [165.8, 127.5, 89.3];
-          }else if(i < p2.cmlSize*4/9){
-            temp = [117.3, 102, 86.7];
-          }else if(i < p2.cmlSize*5/9){
-            temp = [86.7, 102, 117.3];
-          }else if(i < p2.cmlSize*2/3){
-            temp = [89.3, 127.5, 165.8];
-          }else if(i < p2.cmlSize*7/9){
-            temp = [102, 153, 204];
-          }else if(i < p2.cmlSize*8/9){
-            temp = [125, 178.5, 232];
-          }else{
-            temp = [160.7, 204, 247.3];
-          }
-          p2.cmlImage.data[k++] = temp[0]; // red
-          p2.cmlImage.data[k++] = temp[1]; // green
-          p2.cmlImage.data[k++] = temp[2]; // blue
-          p2.cmlImage.data[k++] = 255; // opacity; keep at 255
+      pix = function(i, j){
+        if(i<p2.cmlSize/9){
+          return "(x, 247, 204, 160.7)";
+        }else if(i < p2.cmlSize*2/9){
+          return "(x, 232, 178.5, 125)";
+        }else if(i < p2.cmlSize*2/9){
+          return "(x, 204, 153, 102)";
+        }else if(i < p2.cmlSize/3){
+          return "(x, 165.8, 127.5, 89.3)";
+        }else if(i < p2.cmlSize*4/9){
+          return "(x, 117.3, 102, 86.7)";
+        }else if(i < p2.cmlSize*5/9){
+          return "(x, 86.7, 102, 117.3)";
+        }else if(i < p2.cmlSize*2/3){
+          return "(x, 89.3, 127.5, 165.8)";
+        }else if(i < p2.cmlSize*7/9){
+          return "(x, 102, 153, 204)";
+        }else if(i < p2.cmlSize*8/9){
+          return "(x, 125, 178.5, 232)";
+        }else{
+          return "(x, 160.7, 204, 247.3)";
         }
       }
-      p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
 
       //part 3
       unit = "%"
@@ -373,8 +337,6 @@ function choiceSet(wat) {
 
       //Part 2 - Same as filling in map, but different starting range (cmlSize)
       p2.infant.legendextent = [0, p2.cmlSize];
-
-
       p2.infant.hhelp = d3.scaleLinear()
                             .domain(p2.infant.legendextent)
                             .range([330,0]);
@@ -385,19 +347,7 @@ function choiceSet(wat) {
       p2.infant.lhelp = function(d){return 10 + 90 * p2.infant.xhelp(d);}
 
       p2.infant.colorhelp = function(d){return d3.hcl(p2.infant.hhelp(d), p2.infant.chelp(d), p2.infant.lhelp(d));}
-
-      //Parsing help from: http://stackoverflow.com/questions/10970958/get-a-color-component-from-an-rgb-string-in-javascript
-      for (var j=0, k=0; j < p2.cmlSize; ++j) {
-        for (var i=0; i < p2.cmlSize; ++i) {
-          var temp = d3.rgb(p2.infant.colorhelp(i));
-
-          p2.cmlImage.data[k++] = temp.r; // red
-          p2.cmlImage.data[k++] = temp.g // green
-          p2.cmlImage.data[k++] = temp.b; // blue
-          p2.cmlImage.data[k++] = 255; // opacity; keep at 255
-        }
-      }
-      p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
+      pix = function(i, j){return d3.rgb(p2.infant.colorhelp(i)).toString();};
 
       //part 3
       unit = "%"
@@ -427,22 +377,8 @@ function choiceSet(wat) {
       p2.area.colorhelp = d3.scaleLinear()
                             .domain(p2.area.legendextent)
                             .range([d3.rgb(0,0,0), d3.rgb(255,255,255)]);
+      pix = function(i, j){return p2.area.colorhelp(i);};
 
-
-      //Parsing help from: http://stackoverflow.com/questions/10970958/get-a-color-component-from-an-rgb-string-in-javascript
-      for (var j=0, k=0; j < p2.cmlSize; ++j) {
-        for (var i=0; i < p2.cmlSize; ++i) {
-          var temp = p2.area.colorhelp(i);
-          temp = temp.substring(4, temp.length-1)
-                      .replace(/ /g, '')
-                      .split(',');
-          p2.cmlImage.data[k++] = temp[0]; // red
-          p2.cmlImage.data[k++] = temp[1]; // green
-          p2.cmlImage.data[k++] = temp[2]; // blue
-          p2.cmlImage.data[k++] = 255; // opacity; keep at 255
-        }
-      }
-      p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
 
       //part 3
       unit = " sq mi"
@@ -475,40 +411,30 @@ function choiceSet(wat) {
       p2.er.colorhelp = function(i, j) {return d3.lab(30 + 45 * ((p2.er.legend(i) / p2.es.emax) +
         (p2.er.legend(j) / p2.es.emax)), 0, 230 * (p2.er.legend(i)/p2.es.emax - p2.er.legend(j)/p2.es.emax));}
 
+      pix = function(i, j){return d3.rgb(p2.er.colorhelp(i, p2.cmlSize-j)).toString();};
 
-      for (var j=0, k=0; j < p2.cmlSize; ++j) {
-          for (var i=0; i < p2.cmlSize; ++i) {
-            var temp = d3.rgb(p2.er.colorhelp(i, p2.cmlSize - j));
-            p2.cmlImage.data[k++] = temp.r; // red
-            p2.cmlImage.data[k++] = temp.g; // green
-            p2.cmlImage.data[k++] = temp.b; // blue
-            p2.cmlImage.data[k++] = 255; // opacity; keep at 255
-          }
-        }
-        p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
+      //part 3
+      unit = " (M)";
+      unity = " (W)"
+      minx = 0;
+      miny = 0;
+      maxx = p2.es.emax;
+      maxy = p2.es.emax;
 
-  //part 3
-  unit = " (M)";
-  unity = " (W)"
-  minx = 0;
-  miny = 0;
-  maxx = p2.es.emax;
-  maxy = p2.es.emax;
+      //part 4 - scale unemployment to size of legend
+      p2.es.ticks = d3.scaleLinear()
+                                .domain([0, p2.es.emax])
+                                .range([0,p2.cmlSize])
 
-  //part 4 - scale unemployment to size of legend
-  p2.es.ticks = d3.scaleLinear()
-                            .domain([0, p2.es.emax])
-                            .range([0,p2.cmlSize])
-
-  d3.select("#cmlMarks").selectAll("ellipse")
-    .data(p2.usData).transition(p2.transdur)
-      .attr("rx", p2.circRad)
-      .attr("ry", p2.circRad)
-      .attr("cx", function(d){ return p2.es.ticks(d.men); })
-      .attr("cy", function(d){ return p2.cmlSize - p2.es.ticks(d.women); })
+      d3.select("#cmlMarks").selectAll("ellipse")
+        .data(p2.usData).transition(p2.transdur)
+          .attr("rx", p2.circRad)
+          .attr("ry", p2.circRad)
+          .attr("cx", function(d){ return p2.es.ticks(d.men); })
+          .attr("cy", function(d){ return p2.cmlSize - p2.es.ticks(d.women); })
 
 
-break;
+    break;
 
 //EARNINGS, RE-CENTERED
 case "ER":
@@ -523,43 +449,32 @@ case "ER":
   p2.er.colorhelp = function(i, j) {return d3.lab(30 + 45 * ((p2.er.legend(i) / p2.es.emax) +
         (p2.er.legend(j) / p2.es.emax)), 0, 230 * (p2.er.legend(i)/p2.es.emax - p2.er.legend(j)/p2.es.emax));}
 
+  pix = function(i, j){return d3.rgb(p2.er.colorhelp(i, p2.cmlSize-j)).toString();};
 
-      for (var j=0, k=0; j < p2.cmlSize; ++j) {
-          for (var i=0; i < p2.cmlSize; ++i) {
-            var temp = d3.rgb(p2.er.colorhelp(i, p2.cmlSize - j));
-            p2.cmlImage.data[k++] = temp.r; // red
-            p2.cmlImage.data[k++] = temp.g; // green
-            p2.cmlImage.data[k++] = temp.b; // blue
-            p2.cmlImage.data[k++] = 255; // opacity; keep at 255
-          }
-        }
-        p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
-
-      //part 3
-      unit = " (M)";
-      unity = " (W)"
-      minx = p2.er.menextent[0];
-      miny = p2.er.womenextent[0];
-      maxx = p2.er.menextent[1];
-      maxy = p2.er.womenextent[1]
+  //part 3
+  unit = " (M)";
+  unity = " (W)"
+  minx = p2.er.menextent[0];
+  miny = p2.er.womenextent[0];
+  maxx = p2.er.menextent[1];
+  maxy = p2.er.womenextent[1]
 
 
-      //part 4 - scale unemployment to size of legend
-      p2.er.menticks = d3.scaleLinear()
-                                .domain([p2.er.menextent[0], p2.er.menextent[1]])
-                                .range([0,p2.cmlSize])
+  //part 4 - scale unemployment to size of legend
+  p2.er.menticks = d3.scaleLinear()
+                            .domain([p2.er.menextent[0], p2.er.menextent[1]])
+                            .range([0,p2.cmlSize])
 
-      p2.er.womenticks = d3.scaleLinear()
-                                .domain([p2.er.womenextent[0], p2.er.womenextent[1]])
-                                .range([0,p2.cmlSize])
+  p2.er.womenticks = d3.scaleLinear()
+                            .domain([p2.er.womenextent[0], p2.er.womenextent[1]])
+                            .range([0,p2.cmlSize])
 
-      d3.select("#cmlMarks").selectAll("ellipse")
-        .data(p2.usData).transition(p2.transdur)
-          .attr("rx", p2.circRad)
-          .attr("ry", p2.circRad)
-          .attr("cx", function(d){ return p2.er.menticks(d.men); })
-          .attr("cy", function(d){ return p2.cmlSize - p2.er.womenticks(d.women); })
-
+  d3.select("#cmlMarks").selectAll("ellipse")
+    .data(p2.usData).transition(p2.transdur)
+      .attr("rx", p2.circRad)
+      .attr("ry", p2.circRad)
+      .attr("cx", function(d){ return p2.er.menticks(d.men); })
+      .attr("cy", function(d){ return p2.cmlSize - p2.er.womenticks(d.women); })
 
     break;
 
@@ -575,16 +490,7 @@ case "ER":
                             .domain([0, 1].map(function(d){return p2.vu.scaledhelp(d);}))
                             .range([d3.hcl(d3.rgb(210,0,0)).l, d3.hcl(d3.rgb(0,0,210)).l]);
 
-      for (var j=0, k=0; j < p2.cmlSize; ++j) {
-        for (var i=0; i < p2.cmlSize; ++i) {
-          var temp = d3.rgb(d3.hcl(p2.vu.h(i/p2.cmlSize), p2.vu.c(i/p2.cmlSize) , p2.vu.colorhelp(i)));
-          p2.cmlImage.data[k++] = temp.r; // red
-          p2.cmlImage.data[k++] = temp.g; // green
-          p2.cmlImage.data[k++] = temp.b; // blue
-          p2.cmlImage.data[k++] = 255; // opacity; keep at 255
-        }
-      }
-      p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
+      pix = function(i, j){return d3.rgb(d3.hcl(p2.vu.h(i/p2.cmlSize), p2.vu.c(i/p2.cmlSize) , p2.vu.colorhelp(i))).toString();};
 
       //part 3
       unit = ""
@@ -617,16 +523,7 @@ case "ER":
                             .domain([0, 1].map(function(d){return p2.wu.scaledhelp(d);}))
                             .range([d3.hcl(d3.rgb(210,0,0)).l, d3.hcl(d3.rgb(0,0,210)).l]);
 
-      for (var j=0, k=0; j < p2.cmlSize; ++j) {
-        for (var i=0; i < p2.cmlSize; ++i) {
-          var temp = d3.rgb(d3.hcl(p2.wu.h(i/p2.cmlSize), p2.wu.c(i/p2.cmlSize) , p2.wu.colorhelp(i)));
-          p2.cmlImage.data[k++] = temp.r; // red
-          p2.cmlImage.data[k++] = temp.g; // green
-          p2.cmlImage.data[k++] = temp.b; // blue
-          p2.cmlImage.data[k++] = 255; // opacity; keep at 255
-        }
-      }
-      p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
+      pix = function(i, j){return d3.rgb(d3.hcl(p2.wu.h(i/p2.cmlSize), p2.wu.c(i/p2.cmlSize) , p2.wu.colorhelp(i))).toString();};
 
       //part 3
       unit = ""
@@ -670,16 +567,7 @@ case "ER":
       p2.vb.lhelp = d3.scaleLinear()
                             .domain([0, p2.cmlSize])
                             .range([20,120]);
-      for (var j=0, k=0; j < p2.cmlSize; ++j) {
-        for (var i=0; i < p2.cmlSize; ++i) {
-          var temp = d3.rgb(d3.hcl(p2.vu.h(i/p2.cmlSize), p2.vu.c(i/p2.cmlSize), p2.vb.lhelp(j)));
-          p2.cmlImage.data[k++] = temp.r; // red
-          p2.cmlImage.data[k++] = temp.g; // green
-          p2.cmlImage.data[k++] = temp.b; // blue
-          p2.cmlImage.data[k++] = 255; // opacity; keep at 255
-        }
-      }
-      p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
+      pix = function(i, j){return d3.rgb(d3.hcl(p2.vu.h(i/p2.cmlSize), p2.vu.c(i/p2.cmlSize), p2.vb.lhelp(j))).toString();};
 
       //part 3
       unit = ""
@@ -716,16 +604,8 @@ case "ER":
       p2.wb.lhelp = d3.scaleLinear()
                             .domain([0, p2.cmlSize])
                             .range([20,120]);
-      for (var j=0, k=0; j < p2.cmlSize; ++j) {
-        for (var i=0; i < p2.cmlSize; ++i) {
-          var temp = d3.rgb(d3.hcl(p2.wu.h(i/p2.cmlSize), p2.wu.c(i/p2.cmlSize) , p2.wb.lhelp(j)));
-          p2.cmlImage.data[k++] = temp.r; // red
-          p2.cmlImage.data[k++] = temp.g; // green
-          p2.cmlImage.data[k++] = temp.b; // blue
-          p2.cmlImage.data[k++] = 255; // opacity; keep at 255
-        }
-      }
-      p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
+
+      pix = function(i, j){return d3.rgb(d3.hcl(p2.wu.h(i/p2.cmlSize), p2.wu.c(i/p2.cmlSize) , p2.wb.lhelp(j))).toString();};
 
       //part 3
       unit = "";
@@ -750,19 +630,40 @@ case "ER":
     break;
   }
 
+  //Apply switch values to selected option
+
   //Part 1
   d3.select("#mapUS").selectAll("path").data(p2.usData).transition(p2.transdur)
     .style("fill", fillColor);
+
+    //Part2
+    //Parsing help from: http://stackoverflow.com/questions/10970958/get-a-color-component-from-an-rgb-string-in-javascript
+    for (var j=0, k=0; j < p2.cmlSize; ++j) {
+      for (var i=0; i < p2.cmlSize; ++i) {
+        var temp = pix(i, j);
+        temp = temp.substring(4, temp.length-1)
+                    .replace(/ /g, '')
+                    .split(',');
+        p2.cmlImage.data[k++] = temp[0]; // red
+        p2.cmlImage.data[k++] = temp[1]; // green
+        p2.cmlImage.data[k++] = temp[2]; // blue
+        p2.cmlImage.data[k++] = 255; // opacity; keep at 255
+      }
+    }
+    p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
 
   //Part 3
   d3.select("#xminlabel").html("<text>" + minx + unit + "</text>");
   d3.select("#xmaxlabel").html("<text>" + maxx + unit + "</text>");
 
-  //assign based on univariate vs. bivariate
-  if(uni){
+
+  if(univariate){
     //Part 3
     d3.select("#yminlabel").html("");
     d3.select("#ymaxlabel").html("");
+
+
+
   }else{
     //Part 3
     d3.select("#yminlabel").html("<text>" + miny + unity + "</text>");
@@ -771,13 +672,7 @@ case "ER":
 
 }
 
-/* 0) based on "wat", get all the information (created in dataFinish())
-   about how to visualize "wat" */
-
-/* 1) apply colormap to the states in #mapUS.  Be sure to use a transition
-   of duration p2.transDur.  Try starting with:
-   d3.select("#mapUS").selectAll("path").data(p2.usData) ... and set the
-   color with .style("fill", function(d){ return ... color ...; })*/
+/* Part 1) Apply colormap to the states in #mapUS using transition of duration p2.transDur */
 
 /* 2) reset pixels of cmlImage.data, by traversing it via (see index.html):
    for (var j=0, k=0; j < p2.cmlSize; j++) {
@@ -795,14 +690,7 @@ case "ER":
    Transitions on canvases are more work, so it is okay for this colormap
    image to change suddenly (w/out transition of duration p2.transDur) */
 
-/* 3) Update the labels at the corners of the colormap with
-   d3.select("#xminlabel").html("<text>" + x0 + "</text>"); where x0 is
-   the minimum value shown along the X axis of the colormap, and similarly
-   for the other three labels (xmaxlabel, yminlabel, ymaxlabel). The
-   labels should show the range of the "wat" values that are being
-   colormapped.  For univariate maps, set xminlabel and yminlabel to show
-   the range, and set yminlabel and ymaxlabel to an empty string.  For
-   bivariate maps, set all labels to show the X and Y ranges. */
+/* Part 3) Update min/max value of colormap with appropriate units */
 
 /* 4) update (with a transition of duration p2.transDur) the attributes of
    the #cmlMarks ellipses to display the appropriate set of per-state
@@ -816,8 +704,6 @@ case "ER":
        ry = p2.circRad
        cx = ... position to indicate data value along X ...
        cy = ... position to indicate data value along Y ... */
-
-/* ------------------------- Do not change anything below this line */
 
 exports.hexWidth = hexWidth;
 exports.transDur = transDur;
