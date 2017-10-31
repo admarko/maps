@@ -398,7 +398,6 @@ function choiceSet(wat) {
 
       p2.er.colorhelp = function(i, j) {return d3.lab(30 + 45 * ((p2.er.legend(i) / p2.es.emax) +
             (p2.er.legend(j) / p2.es.emax)), 0, 230 * (p2.er.legend(i)/p2.es.emax - p2.er.legend(j)/p2.es.emax));}
-
       pix = function(i, j){return d3.rgb(p2.er.colorhelp(i, p2.cmlSize-j)).toString();};
 
       //part 3
@@ -417,7 +416,6 @@ function choiceSet(wat) {
       p2.er.womenticks = d3.scaleLinear()
                                 .domain([p2.er.womenextent[0], p2.er.womenextent[1]])
                                 .range([0,p2.cmlSize]);
-
       circx = function(d){ return p2.er.menticks(d.men); };
       circy = function(d){ return p2.cmlSize - p2.er.womenticks(d.women); };
     break;
@@ -433,7 +431,6 @@ function choiceSet(wat) {
       p2.vu.colorhelp = d3.scaleLinear()
                             .domain([0, 1].map(function(d){return p2.vu.scaledhelp(d);}))
                             .range([d3.hcl(d3.rgb(210,0,0)).l, d3.hcl(d3.rgb(0,0,210)).l]);
-
       pix = function(i, j){return d3.rgb(d3.hcl(p2.vu.h(i/p2.cmlSize), p2.vu.c(i/p2.cmlSize) , p2.vu.colorhelp(i))).toString();};
 
       //part 3
@@ -459,7 +456,6 @@ function choiceSet(wat) {
       p2.wu.colorhelp = d3.scaleLinear()
                             .domain([0, 1].map(function(d){return p2.wu.scaledhelp(d);}))
                             .range([d3.hcl(d3.rgb(210,0,0)).l, d3.hcl(d3.rgb(0,0,210)).l]);
-
       pix = function(i, j){return d3.rgb(d3.hcl(p2.wu.h(i/p2.cmlSize), p2.wu.c(i/p2.cmlSize) , p2.wu.colorhelp(i))).toString();};
 
       //part 3
@@ -520,7 +516,6 @@ function choiceSet(wat) {
       p2.wb.lhelp = d3.scaleLinear()
                             .domain([0, p2.cmlSize])
                             .range([20,120]);
-
       pix = function(i, j){return d3.rgb(d3.hcl(p2.wu.h(i/p2.cmlSize), p2.wu.c(i/p2.cmlSize) , p2.wb.lhelp(j))).toString();};
 
       //part 3
@@ -541,13 +536,11 @@ function choiceSet(wat) {
   }
 
   /* Now, apply switch values to selected option */
-
   //Part 1
   d3.select("#mapUS").selectAll("path").data(p2.usData).transition(p2.transdur)
     .style("fill", fillColor);
 
-  //Part2
-  //Parsing help from: http://stackoverflow.com/questions/10970958/get-a-color-component-from-an-rgb-string-in-javascript
+  //Part2, Parsing help from: http://stackoverflow.com/questions/10970958/get-a-color-component-from-an-rgb-string-in-javascript
   for (var j=0, k=0; j < p2.cmlSize; ++j) {
     for (var i=0; i < p2.cmlSize; ++i) {
       var temp = pix(i, j);
@@ -578,7 +571,6 @@ function choiceSet(wat) {
         .attr("ry", p2.cmlSize/4)
         .attr("cx", ticks)
         .attr("cy", p2.cmlSize/2);
-
   }else{
     //Part 3
     d3.select("#yminlabel").html("<text>" + miny + unity + "</text>");
