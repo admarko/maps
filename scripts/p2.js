@@ -211,8 +211,9 @@ function dataFinish(data) {
 function choiceSet(wat) {
    var univariate = (["AR", "EM", "UN", "OB", "IM", "VU", "WU"].indexOf(wat) >= 0); //boolean
    var fillColor;                           //color for Part 1
-   var minx, maxx, miny, maxy, unit, unity; //text for Part 3
    var pix;                                 //pixel for Part 2
+   var minx, maxx, miny, maxy, unit, unity; //text for Part 3
+   var ticks, circx, circy;                 //tick marks for Part 4
 
   switch(wat){
     //UNEMPLOYMENT
@@ -227,7 +228,6 @@ function choiceSet(wat) {
       p2.unemployment.colorhelp = d3.scaleLinear()
                             .domain([0, 1/3, 2/3, 1].map(function(d){return p2.unemployment.scaledhelp(d);}))
                             .range([d3.rgb(0,0,0), d3.rgb(230,0,0), d3.rgb(255,230,0), d3.rgb(255,255,255)]);
-
       pix = function(i, j){return p2.unemployment.colorhelp(i);};
 
       //part 3
@@ -238,14 +238,8 @@ function choiceSet(wat) {
       //part 4 - scale unemployment to size of legend
       p2.unemployment.ticks = d3.scaleLinear()
                                 .domain(p2.unemployment.extent)
-                                .range([0,p2.cmlSize])
-
-      d3.select("#cmlMarks").selectAll("ellipse")
-        .data(p2.usData).transition(p2.transdur)
-          .attr("rx", 0.5)
-          .attr("ry", p2.cmlSize/4)
-          .attr("cx", function(d){ return p2.unemployment.ticks(d.unemployment); })
-          .attr("cy", p2.cmlSize/2);
+                                .range([0,p2.cmlSize]);
+      ticks = function(d){ return p2.unemployment.ticks(d.unemployment);};
     break;
 
     //EMPLOYMENT
@@ -270,14 +264,8 @@ function choiceSet(wat) {
       //part 4 - scale unemployment to size of legend
       p2.employment.ticks = d3.scaleLinear()
                                 .domain(p2.employment.extent)
-                                .range([0,p2.cmlSize])
-
-      d3.select("#cmlMarks").selectAll("ellipse")
-        .data(p2.usData).transition(p2.transdur)
-          .attr("rx", 0.5)
-          .attr("ry", p2.cmlSize/4)
-          .attr("cx", function(d){ return p2.employment.ticks(d.employment); })
-          .attr("cy", p2.cmlSize/2);
+                                .range([0,p2.cmlSize]);
+      ticks = function(d){ return p2.employment.ticks(d.employment);};
     break;
 
     //OBESITY
@@ -318,14 +306,8 @@ function choiceSet(wat) {
       //part 4 - scale unemployment to size of legend
       p2.obesity.ticks = d3.scaleLinear()
                                 .domain(p2.obesity.extent)
-                                .range([0,p2.cmlSize])
-
-      d3.select("#cmlMarks").selectAll("ellipse")
-        .data(p2.usData).transition(p2.transdur)
-          .attr("rx", 0.5)
-          .attr("ry", p2.cmlSize/4)
-          .attr("cx", function(d){ return p2.obesity.ticks(d.obesity); })
-          .attr("cy", p2.cmlSize/2);
+                                .range([0,p2.cmlSize]);
+      ticks = function(d){ return p2.obesity.ticks(d.obesity); };
     break;
 
     //INFANT MORTALITY
@@ -354,14 +336,8 @@ function choiceSet(wat) {
       //part 4 - scale unemployment to size of legend
       p2.infant.ticks = d3.scaleLinear()
                                 .domain(p2.infant.extent)
-                                .range([0,p2.cmlSize])
-
-      d3.select("#cmlMarks").selectAll("ellipse")
-        .data(p2.usData).transition(p2.transdur)
-          .attr("rx", 0.5)
-          .attr("ry", p2.cmlSize/4)
-          .attr("cx", function(d){ return p2.infant.ticks(d.infant); })
-          .attr("cy", p2.cmlSize/2);
+                                .range([0,p2.cmlSize]);
+      ticks = function(d){ return p2.infant.ticks(d.infant); };
     break;
 
     //AREA
@@ -381,17 +357,11 @@ function choiceSet(wat) {
       minx = d3.format(",.0f")(p2.area.extent[0]);
       maxx = d3.format(",.0f")(p2.area.extent[1]);
 
-      //part 4 - scale unemployment to size of legend
+      //part 4
       p2.area.ticks = d3.scaleLinear()
                                 .domain(p2.area.extent)
-                                .range([0,p2.cmlSize])
-
-      d3.select("#cmlMarks").selectAll("ellipse")
-        .data(p2.usData).transition(p2.transdur)
-          .attr("rx", 0.5)
-          .attr("ry", p2.cmlSize/4)
-          .attr("cx", function(d){ return p2.area.ticks(d.area); })
-          .attr("cy", p2.cmlSize/2);
+                                .range([0,p2.cmlSize]);
+      ticks = function(d){ return p2.area.ticks(d.area);};
     break;
 
     //EARNINGS, SYMMETRIC
@@ -420,15 +390,9 @@ function choiceSet(wat) {
       //part 4 - scale unemployment to size of legend
       p2.es.ticks = d3.scaleLinear()
                                 .domain([0, p2.es.emax])
-                                .range([0,p2.cmlSize])
-
-      d3.select("#cmlMarks").selectAll("ellipse")
-        .data(p2.usData).transition(p2.transdur)
-          .attr("rx", p2.circRad)
-          .attr("ry", p2.circRad)
-          .attr("cx", function(d){ return p2.es.ticks(d.men); })
-          .attr("cy", function(d){ return p2.cmlSize - p2.es.ticks(d.women); })
-
+                                .range([0,p2.cmlSize]);
+      circx = function(d){ return p2.es.ticks(d.men);};
+      circy = function(d){ return p2.cmlSize - p2.es.ticks(d.women);};
 
     break;
 
@@ -463,16 +427,11 @@ case "ER":
 
   p2.er.womenticks = d3.scaleLinear()
                             .domain([p2.er.womenextent[0], p2.er.womenextent[1]])
-                            .range([0,p2.cmlSize])
+                            .range([0,p2.cmlSize]);
 
-  d3.select("#cmlMarks").selectAll("ellipse")
-    .data(p2.usData).transition(p2.transdur)
-      .attr("rx", p2.circRad)
-      .attr("ry", p2.circRad)
-      .attr("cx", function(d){ return p2.er.menticks(d.men); })
-      .attr("cy", function(d){ return p2.cmlSize - p2.er.womenticks(d.women); })
-
-    break;
+    circx = function(d){ return p2.er.menticks(d.men); };
+    circy = function(d){ return p2.cmlSize - p2.er.womenticks(d.women); };
+  break;
 
     case "VU":
       //part 1
@@ -496,15 +455,8 @@ case "ER":
       //part 4 - scale unemployment to size of legend
       p2.vu.ticks = d3.scaleLinear()
                                 .domain([0,1])
-                                .range([0,p2.cmlSize])
-
-      d3.select("#cmlMarks").selectAll("ellipse")
-        .data(p2.usData).transition(p2.transdur)
-          .attr("rx", 0.5)
-          .attr("ry", p2.cmlSize/4)
-          .attr("cx", function(d){ return p2.vu.ticks(d.vupl); })
-          .attr("cy", p2.cmlSize/2);
-
+                                .range([0,p2.cmlSize]);
+      ticks =  function(d){ return p2.vu.ticks(d.vupl);};
     break;
 
     case "WU":
@@ -526,18 +478,11 @@ case "ER":
       minx = "Rep.";
       maxx = "Dem.";
 
-      //part 4 -
+      //part 4
       p2.wu.ticks = d3.scaleLinear()
                                 .domain([0,1])
                                 .range([0,p2.cmlSize]);
-
-      d3.select("#cmlMarks").selectAll("ellipse")
-        .data(p2.usData).transition(p2.transdur)
-          .attr("rx", 0.5)
-          .attr("ry", p2.cmlSize/4)
-          .attr("cx", function(d){ return p2.wu.ticks(d.wupl); })
-          .attr("cy", p2.cmlSize/2);
-
+      ticks = function(d){ return p2.wu.ticks(d.wupl);};
     break;
 
     case "VB":
@@ -576,13 +521,8 @@ case "ER":
       p2.vb.ticks = d3.scaleLinear()
                               .domain([0,1])
                               .range([0,p2.cmlSize]);
-
-      d3.select("#cmlMarks").selectAll("ellipse")
-        .data(p2.usData).transition(p2.transdur)
-          .attr("rx", p2.circRad)
-          .attr("ry", p2.circRad)
-          .attr("cx", function(d){ return p2.vb.ticks(d.vupl);})
-          .attr("cy", function(d){ return p2.cmlSize - p2.vb.ticks(p2.vb.va(d));});
+      circx = function(d){ return p2.vb.ticks(d.vupl);};
+      circy = function(d){ return p2.cmlSize - p2.vb.ticks(p2.vb.va(d));};
     break;
 
     case "WB":
@@ -614,13 +554,8 @@ case "ER":
       p2.wb.ticks = d3.scaleLinear()
                               .domain([0,1])
                               .range([0,p2.cmlSize]);
-
-      d3.select("#cmlMarks").selectAll("ellipse")
-        .data(p2.usData).transition(p2.transdur)
-          .attr("rx", p2.circRad)
-          .attr("ry", p2.circRad)
-          .attr("cx", function(d){ return p2.wb.ticks(d.wupl);})
-          .attr("cy", function(d){ return p2.cmlSize - p2.wb.ticks(p2.wb.wa(d));});
+      circx = function(d){ return p2.wb.ticks(d.wupl);};
+      circy = function(d){ return p2.cmlSize - p2.wb.ticks(p2.wb.wa(d));};
     break;
   }
 
@@ -656,32 +591,31 @@ case "ER":
     d3.select("#yminlabel").html("");
     d3.select("#ymaxlabel").html("");
 
+    d3.select("#cmlMarks").selectAll("ellipse")
+      .data(p2.usData).transition(p2.transdur)
+        .attr("rx", 0.5)
+        .attr("ry", p2.cmlSize/4)
+        .attr("cx", ticks)
+        .attr("cy", p2.cmlSize/2);
+
   }else{
     //Part 3
     d3.select("#yminlabel").html("<text>" + miny + unity + "</text>");
     d3.select("#ymaxlabel").html("<text>" + maxy + unity + "</text>");
-  }
 
+    d3.select("#cmlMarks").selectAll("ellipse")
+      .data(p2.usData).transition(p2.transdur)
+        .attr("rx", p2.circRad)
+        .attr("ry", p2.circRad)
+        .attr("cx", circx)
+        .attr("cy", circy)
+  }
 }
 
 /* Part 1) Apply colormap to the states in #mapUS using transition of duration p2.transDur */
-
 /* Part 2) Fill in colormap
-
 /* Part 3) Update min/max value of colormap with appropriate units */
-
-/* 4) update (with a transition of duration p2.transDur) the attributes of
-   the #cmlMarks ellipses to display the appropriate set of per-state
-   marks over the colormap legend.  For univariate maps, set:
-       rx = 0.5         (e.g. .attr("rx", 0.5))
-       ry = p2.cmlSize/4
-       cx = ... position to indicate data value ...
-       cy = p2.cmlSize/2
-   For bivariate maps, set:
-       rx = p2.circRad
-       ry = p2.circRad
-       cx = ... position to indicate data value along X ...
-       cy = ... position to indicate data value along Y ... */
+/* Part 4) Add ticks (univariate) or bubbles (bivarate) to colormap */
 
 exports.hexWidth = hexWidth;
 exports.transDur = transDur;
