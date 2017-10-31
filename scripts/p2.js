@@ -220,11 +220,10 @@ function choiceSet(wat) {
       //part 1
       fillColor = function(d){return p2.unemployment.color(d.unemployment);}
 
-      //Part 2 - Same as filling in map, but different starting range (cmlSize)
-      p2.unemployment.legendextent = [0, p2.cmlSize];
+      //Part 2
       p2.unemployment.scaledhelp = d3.scaleLinear()
                             .domain([0,1])
-                            .range(p2.unemployment.legendextent);
+                            .range([0, p2.cmlSize]);
       p2.unemployment.colorhelp = d3.scaleLinear()
                             .domain([0, 1/3, 2/3, 1].map(function(d){return p2.unemployment.scaledhelp(d);}))
                             .range([d3.rgb(0,0,0), d3.rgb(230,0,0), d3.rgb(255,230,0), d3.rgb(255,255,255)]);
@@ -254,11 +253,10 @@ function choiceSet(wat) {
       //part 1
       fillColor = function(d){return p2.employment.color(d.employment);}
 
-      //Part 2 - Same as filling in map, but different starting range (cmlSize)
-      p2.employment.legendextent = [0, p2.cmlSize];
+      //Part 2
       p2.employment.scaledhelp = d3.scaleLinear()
                             .domain([0,1])
-                            .range(p2.employment.legendextent);
+                            .range([0, p2.cmlSize]);
       p2.employment.colorhelp = d3.scaleLinear()
                             .domain([0, 1/3, 2/3, 1].map(function(d){return p2.employment.scaledhelp(d);}))
                             .range([d3.rgb(255,255,255), d3.rgb(255,230,0), d3.rgb(230,0,0), d3.rgb(0,0,0)]);
@@ -287,7 +285,7 @@ function choiceSet(wat) {
       //part 1
       fillColor = function(d){return p2.obesity.color(d.obesity);}
 
-      //Part 2 - Same as filling in map, but different starting range (cmlSize)
+      //Part 2
       pix = function(i, j){
         if(i<p2.cmlSize/9){
           return "(x, 247, 204, 160.7)";
@@ -335,13 +333,12 @@ function choiceSet(wat) {
       //part 1
       fillColor = function(d){return p2.infant.color(d.infant);}
 
-      //Part 2 - Same as filling in map, but different starting range (cmlSize)
-      p2.infant.legendextent = [0, p2.cmlSize];
+      //Part 2
       p2.infant.hhelp = d3.scaleLinear()
-                            .domain(p2.infant.legendextent)
+                            .domain([0, p2.cmlSize])
                             .range([330,0]);
       p2.infant.xhelp = d3.scaleLinear()
-                            .domain(p2.infant.legendextent)
+                            .domain([0, p2.cmlSize])
                             .range([0,1]);
       p2.infant.chelp = function(d){return 23 * Math.sin(Math.PI * p2.infant.xhelp(d))**2  ;}
       p2.infant.lhelp = function(d){return 10 + 90 * p2.infant.xhelp(d);}
@@ -372,10 +369,9 @@ function choiceSet(wat) {
       //part 1
       fillColor = function(d){return p2.area.color(d.area);}
 
-      //Part 2 - Same as filling in map, but different starting range (cmlSize)
-      p2.area.legendextent = [0, p2.cmlSize];
+      //Part 2
       p2.area.colorhelp = d3.scaleLinear()
-                            .domain(p2.area.legendextent)
+                            .domain([0, p2.cmlSize])
                             .range([d3.rgb(0,0,0), d3.rgb(255,255,255)]);
       pix = function(i, j){return p2.area.colorhelp(i);};
 
@@ -552,7 +548,6 @@ case "ER":
       p2.er.legend = d3.scaleLinear()
                           .domain([0, p2.cmlSize])
                           .range([0, p2.es.emax]);
-
       p2.er.colorhelp = function(i, j) {return d3.lab(30 + 45 * ((p2.er.legend(i) / p2.es.emax) +
         (p2.er.legend(j) / p2.es.emax)), 0, 230 * (p2.er.legend(i)/p2.es.emax - p2.er.legend(j)/p2.es.emax));}
 
@@ -561,9 +556,9 @@ case "ER":
       p2.vb.scaledhelp = d3.scaleLinear()
                             .domain([0,1])
                             .range([0, p2.cmlSize]);
-      p2.vb.colorhelp = d3.scaleLinear()
-                            .domain([0, 1].map(function(d){return p2.vb.scaledhelp(d);}))
-                            .range([d3.hcl(d3.rgb(210,0,0)).l, d3.hcl(d3.rgb(0,0,210)).l]);
+      //p2.vb.colorhelp = d3.scaleLinear()
+      //                      .domain([0, 1].map(function(d){return p2.vb.scaledhelp(d);}))
+      //                      .range([d3.hcl(d3.rgb(210,0,0)).l, d3.hcl(d3.rgb(0,0,210)).l]);
       p2.vb.lhelp = d3.scaleLinear()
                             .domain([0, p2.cmlSize])
                             .range([20,120]);
@@ -598,9 +593,9 @@ case "ER":
       p2.wb.scaledhelp = d3.scaleLinear()
                             .domain([0,1])
                             .range([0, p2.cmlSize]);
-      p2.wb.colorhelp = d3.scaleLinear()
-                            .domain([0, 1].map(function(d){return p2.wb.scaledhelp(d);}))
-                            .range([d3.hcl(d3.rgb(210,0,0)).l, d3.hcl(d3.rgb(0,0,210)).l]);
+      // p2.wb.colorhelp = d3.scaleLinear()
+      //                       .domain([0, 1].map(function(d){return p2.wb.scaledhelp(d);}))
+      //                       .range([d3.hcl(d3.rgb(210,0,0)).l, d3.hcl(d3.rgb(0,0,210)).l]);
       p2.wb.lhelp = d3.scaleLinear()
                             .domain([0, p2.cmlSize])
                             .range([20,120]);
@@ -626,7 +621,6 @@ case "ER":
           .attr("ry", p2.circRad)
           .attr("cx", function(d){ return p2.wb.ticks(d.wupl);})
           .attr("cy", function(d){ return p2.cmlSize - p2.wb.ticks(p2.wb.wa(d));});
-
     break;
   }
 
@@ -636,21 +630,21 @@ case "ER":
   d3.select("#mapUS").selectAll("path").data(p2.usData).transition(p2.transdur)
     .style("fill", fillColor);
 
-    //Part2
-    //Parsing help from: http://stackoverflow.com/questions/10970958/get-a-color-component-from-an-rgb-string-in-javascript
-    for (var j=0, k=0; j < p2.cmlSize; ++j) {
-      for (var i=0; i < p2.cmlSize; ++i) {
-        var temp = pix(i, j);
-        temp = temp.substring(4, temp.length-1)
-                    .replace(/ /g, '')
-                    .split(',');
-        p2.cmlImage.data[k++] = temp[0]; // red
-        p2.cmlImage.data[k++] = temp[1]; // green
-        p2.cmlImage.data[k++] = temp[2]; // blue
-        p2.cmlImage.data[k++] = 255; // opacity; keep at 255
-      }
+  //Part2
+  //Parsing help from: http://stackoverflow.com/questions/10970958/get-a-color-component-from-an-rgb-string-in-javascript
+  for (var j=0, k=0; j < p2.cmlSize; ++j) {
+    for (var i=0; i < p2.cmlSize; ++i) {
+      var temp = pix(i, j);
+      temp = temp.substring(4, temp.length-1)
+                  .replace(/ /g, '')
+                  .split(',');
+      p2.cmlImage.data[k++] = temp[0];  // red
+      p2.cmlImage.data[k++] = temp[1];  // green
+      p2.cmlImage.data[k++] = temp[2];  // blue
+      p2.cmlImage.data[k++] = 255;      // opacity (keep at 255)
     }
-    p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
+  }
+  p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
 
   //Part 3
   d3.select("#xminlabel").html("<text>" + minx + unit + "</text>");
@@ -662,8 +656,6 @@ case "ER":
     d3.select("#yminlabel").html("");
     d3.select("#ymaxlabel").html("");
 
-
-
   }else{
     //Part 3
     d3.select("#yminlabel").html("<text>" + miny + unity + "</text>");
@@ -674,21 +666,7 @@ case "ER":
 
 /* Part 1) Apply colormap to the states in #mapUS using transition of duration p2.transDur */
 
-/* 2) reset pixels of cmlImage.data, by traversing it via (see index.html):
-   for (var j=0, k=0; j < p2.cmlSize; j++) {
-       for (var i=0; i < p2.cmlSize; i++) {
-           p2.cmlImage.data[k++] =  ... red (from 0 to 255) ... ;
-           p2.cmlImage.data[k++] =  ... green ... ;
-           p2.cmlImage.data[k++] =  ... blue ... ;
-           p2.cmlImage.data[k++] =  255; // opacity
-       }
-   }
-   For the univariate colormaps, only compute the colormap values for the
-   first row, and then on subsequent rows just copy the values from
-   previous row. Finally, redisplay image with:
-   p2.cmlContext.putImageData(p2.cmlImage, 0, 0);
-   Transitions on canvases are more work, so it is okay for this colormap
-   image to change suddenly (w/out transition of duration p2.transDur) */
+/* Part 2) Fill in colormap
 
 /* Part 3) Update min/max value of colormap with appropriate units */
 
