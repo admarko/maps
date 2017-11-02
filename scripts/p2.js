@@ -59,7 +59,7 @@ function rowFinish(d) {
 function dataFinish(data) {
   //UNEMPLOYMENT - map [0,1/3,2/3,1] over unemployment range scaled to [0,1] then convert to color
   p2.unemployment = {}
-  p2.unemployment.extent = d3.extent(data, function(d){ return d.unemployment;});
+  p2.unemployment.extent = d3.extent(data, (d) => d.unemployment);
   p2.unemployment.scaled = d3.scaleLinear()
                         .domain([0,1])
                         .range(p2.unemployment.extent);
